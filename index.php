@@ -66,9 +66,9 @@
 <!-- aqui inicia el inifine scrool aun falta por implementar -->
 
 <div class="container-fluid">
-<div class="row justify-content-center">
+<div class="row justify-content-center" style="padding: 10px;" >
 
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="img/d1.png" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
@@ -85,7 +85,7 @@
   </div>
 </div>
 
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="img/d5.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
@@ -102,7 +102,7 @@
   </div>
 </div>
 
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="img/d2.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
@@ -118,7 +118,7 @@
     </div>
   </div>
 </div>
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="img/d3.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
@@ -134,7 +134,7 @@
     </div>
   </div>
 </div>
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="img/d4.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
