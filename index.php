@@ -2,6 +2,11 @@
 
 <?php 
 
+// Esto le dice a PHP que usaremos cadenas UTF-8 hasta el final
+mb_internal_encoding('UTF-8');
+ // Esto le dice a PHP que generaremos cadenas UTF-8
+mb_http_output('UTF-8');
+// con esto cargamos las funciones mas recurrentes del sistema
 include("funciones/funciones.php");
 
 ?>
@@ -17,7 +22,7 @@ include("funciones/funciones.php");
   <script src="js/popper.min.js"></script> 
   <script src="js/bootstrap.min.js"></script> 
   
-
+  <meta charset="UTF-8">
 
   
 <title>EnColorada</title>
@@ -57,8 +62,7 @@ include("funciones/funciones.php");
 		
       </ul>
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
-        <button class="btn btn-outline-success" type="submit">Buscar</button>  <!-- Boton de busqueda de servicios o negocios -->
+        <button class="btn btn-outline-success" type="submit">An&uacutenciate aqu&iacute</button>  <!-- Boton de busqueda de servicios o negocios -->
       </form>
     </div>
   </div>
@@ -66,17 +70,31 @@ include("funciones/funciones.php");
 
 
 <!-- Jumbotron -->
-<div class="bg-image p-5 text-center shadow-1-strong rounded mb-5 text-gray" style="
-    background-image: url('img/top-view-of-figueres-catalonia.jpg');
-  ">
-  
-  <h2 class="mb-1 h4">
-    Todo lo encuentras
-  </h2>
-  
-  <h1 class="mb-1 h1">EnColorada</h1>
 
-  
+<div class="container-fluid ">
+<div class="row justify-content-center"  >
+<div id="carouselExampleInterval" class="carousel slide justify-content-center" data-bs-ride="carousel" style="width: 70%;">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="10000">
+      <img src="img/baners/4582296.png" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <img src="img/baners/5565344.png" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="img/baners/5651956.png" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+</div>
 </div>
 
 <!-- colocamos el contenedor de fichas para las templates -->
@@ -112,6 +130,14 @@ include("funciones/funciones.php");
 		$cierre =  $row_pro['hc'];
 		$hora = getHora_m();
 		
+		// funciones actualizar contador de vistas
+		
+		$contador = $row_pro['contadorl'];
+		$conta1 = $contador + 1 ;
+		$acontador = "UPDATE fichas SET contadorl='$conta1' WHERE idfichas = '$idfichas'";
+		mysqli_query($con, $acontador);
+		
+ 		
 		// Ravisamos si el lugar esta abierto o cerrado
 		$estado = getEstado($hora,$apertura,$cierre);
 		
@@ -126,10 +152,10 @@ include("funciones/funciones.php");
 				<div class='col-md-8'>
 				<div class='card-body'>				
 				<h5 class='card-title'>$nombre</h5>
-				<p class='card-text text-truncate' style='transition: width 2s'>$descripcion</p>
+				<p class='card-text text-justify text-truncate' style='text-align: justify'>$descripcion</p>
 				<p class='card-text'>$estado</p>
 				<p class='card-text'><small class='text-muted'>Actualizado hace $hora tiempo</small></p>
-				<button type='button' class='btn btn-primary '>Ver mas</button>
+				<button type='button' class='btn btn-primary'>Ver mas</button>
 				</div>
 				</div>
 				</div>
@@ -138,7 +164,8 @@ include("funciones/funciones.php");
 	
 	
 		";
-	
+		
+
 	}
 	?>
 
