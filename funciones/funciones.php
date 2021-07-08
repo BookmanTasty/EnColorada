@@ -14,4 +14,20 @@ $tiempo_m = ($hora * 60) + $minuto;
 return $tiempo_m;
 }
 
+function getEstado($hora,$apertura,$cierre)
+{
+if ($hora > $apertura )
+		{
+			if ($hora < $cierre)
+			{
+				$estado = "Abierto";
+			}
+			else 
+				$estado = "Cerrado";
+				
+		}
+		else
+			$estado = "Cerrado";
+return $estado;
+}
 ?>

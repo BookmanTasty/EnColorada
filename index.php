@@ -15,6 +15,13 @@ include("funciones/funciones.php");
   <script src="js/popper.min.js"></script> 
   <script src="js/bootstrap.min.js"></script> 
   
+  <style>
+#text-truncate {
+transition: 2s;
+}
+</style>
+
+  
 <title>EnColorada</title>
  </head>
  
@@ -90,7 +97,6 @@ include("funciones/funciones.php");
 					);
 				});
 </script>
-
 <!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
 	<?php 
 	$get_pro = "select * from fichas";
@@ -107,16 +113,7 @@ include("funciones/funciones.php");
 		$hora = getHora_m();
 		
 		// Ravisamos si el lugar esta abierto o cerrado
-		if ($hora > $apertura )
-		{
-			if ($hora < $cierre)
-			{
-				$estado = "Abierto";
-			}
-				
-		}
-		else
-			$estado = "Cerrado";
+		$estado = getEstado($hora,$apertura,$cierre);
 		
 		// Colocamos las fichas cargadas desde la base de datos
 	
@@ -150,89 +147,6 @@ include("funciones/funciones.php");
 
 
 
-<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="img/d1.png" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Local 1</h5>
-        <p class="card-text">Breve descripción del local y sus servicios más comunes.</p>
-		<p class="card-text">Abierto/Cerrado</p>
-  		<p class="card-text"><small class="text-muted">Actualizado hace n tiempo</small></p>
-		<button type="button" class="btn btn-primary ">Ver mas</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="img/d5.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Local 5</h5>
-        <p class="card-text">Breve descripción del local y sus servicios más comunes.</p>
-		<p class="card-text">Abierto/Cerrado</p>
-  		<p class="card-text"><small class="text-muted">Actualizado hace n tiempo</small></p>
-		<button type="button" class="btn btn-primary ">Ver mas</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="img/d2.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Local 2</h5>
-        <p class="card-text">Breve descripción del local y sus servicios más comunes.</p>
-		<p class="card-text">Abierto/Cerrado</p>
-  		<p class="card-text"><small class="text-muted">Actualizado hace n tiempo</small></p>
-		<button type="button" class="btn btn-primary ">Ver mas</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="img/d3.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Local 3</h5>
-        <p class="card-text">Breve descripción del local y sus servicios más comunes.</p>
-		<p class="card-text">Abierto/Cerrado</p>
-  		<p class="card-text"><small class="text-muted">Actualizado hace n tiempo</small></p>
-		<button type="button" class="btn btn-primary ">Ver mas</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="img/d4.jpg" class="img-fluid rounded-start" alt="Aqui va descripcion del negocio">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Local 4</h5>
-        <p class="card-text">Breve descripción del local y sus servicios más comunes.</p>
-		<p class="card-text">Abierto/Cerrado</p>
-  		<p class="card-text"><small class="text-muted">Actualizado hace n tiempo</small></p>
-		<button type="button" class="btn btn-primary ">Ver mas</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
 
 </div>
 
