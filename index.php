@@ -1,11 +1,13 @@
-<html>
-
 <!-- cargamos las funciones especiales para la pagina -->
+
 <?php 
 
 include("funciones/funciones.php");
 
 ?>
+
+<html>
+
  <head> 
 
   <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"> 
@@ -15,17 +17,15 @@ include("funciones/funciones.php");
   <script src="js/popper.min.js"></script> 
   <script src="js/bootstrap.min.js"></script> 
   
-  <style>
-#text-truncate {
-transition: 2s;
-}
-</style>
+
 
   
 <title>EnColorada</title>
  </head>
  
  <body>
+ 
+
 <!-- Esta es la barra de navegacion en header -->
 
 <nav class="navbar sticky-top navbar-expand-lg  navbar-light bg-light">
