@@ -1,3 +1,11 @@
+<html>
+
+<!-- cargamos las funciones especiales para la pagina -->
+<?php 
+
+include("funciones/funciones.php");
+
+?>
  <head> 
 
   <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"> 
@@ -6,6 +14,7 @@
   <script src="js/jquery.min.js"></script> 
   <script src="js/popper.min.js"></script> 
   <script src="js/bootstrap.min.js"></script> 
+  
 <title>EnColorada</title>
  </head>
  
@@ -63,10 +72,67 @@
   
 </div>
 
-<!-- aqui inicia el inifine scrool aun falta por implementar -->
+<!-- colocamos el contenedor de fichas para las templates -->
 
 <div class="container-fluid">
 <div class="row justify-content-center" style="padding: 10px;" >
+
+<!-- script jquery mostrar textos extentidos descripciones-->
+<script>
+					$(document).ready(function () {
+					$('.card-text').hover(
+						function () {
+									$(this).removeClass('text-truncate');
+							},
+							function () {
+							$(this).addClass('text-truncate');
+						}
+					);
+				});
+</script>
+
+<!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
+	<?php 
+	$get_pro = "select * from fichas";
+
+	$run_pro = mysqli_query($con, $get_pro); 
+	
+	while($row_pro=mysqli_fetch_array($run_pro)){
+	
+		$idfichas = $row_pro['idfichas'];
+		$nombre = $row_pro['nombre'];
+		$descripcion = $row_pro['desc'];		
+
+	
+		echo "
+				<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
+				<div class='row g-0'>
+				<div class='col-md-4'>
+				<img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start' alt='$descripcion'>
+				</div>
+				<div class='col-md-8'>
+				<div class='card-body'>				
+				<h5 class='card-title'>$nombre</h5>
+				<p class='card-text text-truncate' style='transition: width 2s'>$descripcion</p>
+				<p class='card-text'>Abierto/Cerrado</p>
+				<p class='card-text'><small class='text-muted'>Actualizado hace n tiempo</small></p>
+				<button type='button' class='btn btn-primary '>Ver mas</button>
+				</div>
+				</div>
+				</div>
+				</div>
+	
+	
+	
+		";
+	
+	}
+	?>
+
+
+<!-- aqui inicia el inifine scrool aun falta por implementar -->
+
+
 
 <div class="card m-3 pe-2" style="max-width: 540px; padding: 10px;">
   <div class="row g-0">
@@ -165,14 +231,7 @@
   
 </footer>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/8.7.0/firebase-app.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="/__/firebase/8.7.0/firebase-analytics.js"></script>
-
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
 
 </body>
+</html>
