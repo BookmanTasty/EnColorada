@@ -4,4 +4,14 @@ $con = mysqli_connect("localhost", "root", "", "EnColorada");
 if (mysqli_connect_errno()) {
     echo "Error en coneccion" . mysqli_connect_error();
 }
+
+function getHora_m()
+{
+date_default_timezone_set('America/Mexico_City');
+$hora = date('H');
+$minuto = date('i');
+$tiempo_m = ($hora * 60) + $minuto;
+return $tiempo_m;
+}
+
 ?>

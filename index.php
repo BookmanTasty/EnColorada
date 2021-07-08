@@ -101,8 +101,24 @@ include("funciones/funciones.php");
 	
 		$idfichas = $row_pro['idfichas'];
 		$nombre = $row_pro['nombre'];
-		$descripcion = $row_pro['desc'];		
-
+		$descripcion = $row_pro['desc'];
+		$apertura = $row_pro['ha'];
+		$cierre =  $row_pro['hc'];
+		$hora = getHora_m();
+		
+		// Ravisamos si el lugar esta abierto o cerrado
+		if ($hora > $apertura )
+		{
+			if ($hora < $cierre)
+			{
+				$estado = "Abierto";
+			}
+				
+		}
+		else
+			$estado = "Cerrado";
+		
+		// Colocamos las fichas cargadas desde la base de datos
 	
 		echo "
 				<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
@@ -114,8 +130,8 @@ include("funciones/funciones.php");
 				<div class='card-body'>				
 				<h5 class='card-title'>$nombre</h5>
 				<p class='card-text text-truncate' style='transition: width 2s'>$descripcion</p>
-				<p class='card-text'>Abierto/Cerrado</p>
-				<p class='card-text'><small class='text-muted'>Actualizado hace n tiempo</small></p>
+				<p class='card-text'>$estado</p>
+				<p class='card-text'><small class='text-muted'>Actualizado hace $hora tiempo</small></p>
 				<button type='button' class='btn btn-primary '>Ver mas</button>
 				</div>
 				</div>
