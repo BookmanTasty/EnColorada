@@ -188,28 +188,38 @@ include("funciones/funciones.php");
 
                 <!-- aqui inicia el inifine scrool aun falta por implementar -->
 
-                <ul class="pagination">
-                    <li><a href="?numeropagina=1">First</a></li>
-                    <li class="<?php if ($numeropagina <= 1) {
-                    echo 'disabled';
-                } ?>">
-                        <a href="<?php if ($pageno <= 1) {
-                    echo '#';
-                } else {
-                    echo "?numeropagina=" . ($numeropagina - 1);
-                } ?>">Prev</a>
-                    </li>
-                    <li class="<?php if ($numeropagina >= $total_pages) {
-                    echo 'disabled';
-                } ?>">
-                        <a href="<?php if ($numeropagina >= $total_pages) {
-                    echo '#';
-                } else {
-                    echo "?numeropagina=" . ($numeropagina + 1);
-                } ?>">Next</a>
-                    </li>
-                    <li><a href="?numeropagina=<?php echo $total_pages; ?>">Last</a></li>
-                </ul>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link" href="<?php
+                            if ($numeropagina <= 1) {
+                                echo '#';
+                            } else {
+                                echo "?numeropagina=" . ($numeropagina - 1);
+                            }
+                            ?>">Anterior</a></li>
+                        
+                        <?php  // esta ciclo for rellena automaticamente las paginas disponibles
+                            for ($i = 1; $i<= $total_pages; $i++ ){
+                                if ($i == $numeropagina){
+                                    echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
+                                }
+                                else {
+                                    echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
+                                }
+                                
+                            }
+                        ?>
+                
+                        <li class="page-item"><a class="page-link" href="<?php
+                            if ($numeropagina >= $total_pages) {
+                                echo '#';
+                            } else {
+                                echo "?numeropagina=" . ($numeropagina + 1);
+                            }
+                            ?>">Siguiente</a></li>
+                    </ul>
+                </nav>
 
 
             </div>
