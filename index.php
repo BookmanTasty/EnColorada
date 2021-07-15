@@ -5,6 +5,15 @@
 mb_internal_encoding('UTF-8');
 // Esto le dice a PHP que generaremos cadenas UTF-8
 mb_http_output('UTF-8');
+// modeulo sesion y aleatoriedad, se utilizara posteriormente para sesiones de usuarios
+session_start();
+if (isset($_SESSION['rnd'])) {
+    $rnd = $_SESSION['rnd'];
+} else {
+    $_SESSION['rnd'] = random_int(100, 999);
+    $rnd = $_SESSION['rnd'];
+}
+
 // cargamos la variables de paginacion de la pagina 
 
 if (isset($_GET['numeropagina'])) {
@@ -135,7 +144,7 @@ include("funciones/funciones.php");
                 $total_rows = mysqli_fetch_array($result)[0];
                 $total_pages = ceil($total_rows / $fichas_por_pagina);
 
-                $get_pro = "select * from fichas LIMIT $offset, $fichas_por_pagina ";
+                $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
 
                 $run_pro = mysqli_query($con, $get_pro);
 
