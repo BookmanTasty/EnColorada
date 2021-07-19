@@ -66,7 +66,7 @@ include("funciones/funciones.php");
                             <a class="nav-link" href="#">Lugares</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Servicios</a>
+                            <a class="nav-link" href="#">Categorías</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Abierto ahora</a>
@@ -169,7 +169,19 @@ include("funciones/funciones.php");
                     $estado = getEstado($hora, $apertura, $cierre);
 
                     // Colocamos las fichas cargadas desde la base de datos
-
+                    
+                   // codigo temporal para crear carpetas e imagenes de logo e imagenes temporles
+                   // mkdir("img/fichas/$idfichas",0700);
+                   // $img = imagecreate(240, 240);
+                   // $white = imagecolorallocate($img, 255, 255, 255);
+                   // $black = imagecolorallocate($img, 0, 0, 0);
+                   // imagefilledrectangle($img, 0, 0, 240, 240, $black);
+                   // imagestring($img, 5, 0, 0, $nombre, $white);
+                   // imagepng($img, "img/fichas/$idfichas/logo.png");
+                   // imagestring($img, 5, 0, 0, $descripcion, $white);
+                   // imagepng($img, "img/fichas/$idfichas/id1.png");
+                   // imagestring($img, 5, 0, 0, $apertura, $white);
+                   // imagepng($img, "img/fichas/$idfichas/id2.png");
                     echo "
 				<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
 				<div class='row g-0'>
@@ -207,19 +219,18 @@ include("funciones/funciones.php");
                                 echo "?numeropagina=" . ($numeropagina - 1);
                             }
                             ?>">Anterior</a></li>
-                        
-                        <?php  // esta ciclo for rellena automaticamente las paginas disponibles
-                            for ($i = 1; $i<= $total_pages; $i++ ){
-                                if ($i == $numeropagina){
-                                    echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
-                                }
-                                else {
-                                    echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
-                                }
-                                
+
+                        <?php
+                        // esta ciclo for rellena automaticamente las paginas disponibles
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            if ($i == $numeropagina) {
+                                echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
+                            } else {
+                                echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
                             }
+                        }
                         ?>
-                
+
                         <li class="page-item"><a class="page-link" href="<?php
                             if ($numeropagina >= $total_pages) {
                                 echo '#';
