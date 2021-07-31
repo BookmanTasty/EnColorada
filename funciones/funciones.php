@@ -31,4 +31,18 @@ if ($hora > $apertura )
 return $estado;
 }
 
+// funcion para colocar los horarios en el modal o pagina
+function getHorario ($time){
+    
+    $hours = floor($time / 60);
+    $minutes = ($time % 60);
+    if ($hours > 12) {
+        $horas = $hours - 12;
+        $data = "$horas" . ":$minutes"." PM";
+    } else {
+        $data = "$hours" . ":$minutes"." AM";
+    }
+    return sprintf( $data);
+}
+
 ?>
