@@ -67,7 +67,7 @@ else {
         $cierre = $row_pro['hc'];
         $hora = getHora_m();
         $descripcion_adaptada = substr($descripcion, 0, 140);
-      
+
         // funciones actualizar contador de vistas
 
         $contador = $row_pro['contadorl'];
@@ -78,29 +78,29 @@ else {
         // Ravisamos si el lugar esta abierto o cerrado
 
         $estado = getEstado($hora, $apertura, $cierre);
-        
+
         // actualizacion de horarios apertura y cierre del modal
-        
-        $hapertura = getHorario ($apertura);
-        $hcierre = getHorario ($cierre);
-        
+
+        $hapertura = getHorario($apertura);
+        $hcierre = getHorario($cierre);
+
         // Cargar tags productos y servicios 
-       $productos = $row_pro['tags'];
-       $servicios = $row_pro['tags1']; 
-       $tproductos = explode(" ", $productos);
-       $tservicios = explode(" ", $servicios);
-       $pilaproductos = array();
-       $pilaservicios = array();
-       
-            for ($i = 0 ; $i < count($tproductos) ; $i++){
-               array_push($pilaproductos, "<a href='unitags?producto=$tproductos[$i]' class='btn btn-light'>$tproductos[$i]</a>");
-           }
-            
-            for ($i = 0 ; $i < count($tservicios) ; $i++){
-                array_push($pilaservicios, "<a href='unitags?servicio=$tservicios[$i]' class='btn btn-light'>$tservicios[$i]</a>");
-            }
-        $fproductos = implode(" ",$pilaproductos)  ;
-        $fservicios = implode(" ",$pilaservicios)  ;
+        $productos = $row_pro['tags'];
+        $servicios = $row_pro['tags1'];
+        $tproductos = explode(" ", $productos);
+        $tservicios = explode(" ", $servicios);
+        $pilaproductos = array();
+        $pilaservicios = array();
+
+        for ($i = 0; $i < count($tproductos); $i++) {
+            array_push($pilaproductos, "<a href='unitags?producto=$tproductos[$i]' class='btn btn-light'>$tproductos[$i]</a>");
+        }
+
+        for ($i = 0; $i < count($tservicios); $i++) {
+            array_push($pilaservicios, "<a href='unitags?servicio=$tservicios[$i]' class='btn btn-light'>$tservicios[$i]</a>");
+        }
+        $fproductos = implode(" ", $pilaproductos);
+        $fservicios = implode(" ", $pilaservicios);
         echo "
 				
 <div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
@@ -133,13 +133,13 @@ else {
         
         <p> Horarios  Apertura: $hapertura  Cierre: $hcierre <p>
         <p>Productos</p>
-        $fproductos
+        <p>$fproductos</p>
         <p>Servicios</p>
-        $fservicios
+        <p>$fservicios</p>
       </div>
       <div class='modal-footer'>
         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-        <button type='button' class='btn btn-primary'>Mas informacion</button>
+        <a href='ficha.php?ficha=$idfichas' class='btn btn-primary'>Mas informacion</a>
       </div>
     </div>
   </div>
