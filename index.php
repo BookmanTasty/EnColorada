@@ -69,7 +69,7 @@ include("funciones/funciones.php");
                             <a class="nav-link" href="#">Lugares</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Categorías</a>
+                            <a class="nav-link" href="categorias.php">Categorías</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Abierto ahora</a>

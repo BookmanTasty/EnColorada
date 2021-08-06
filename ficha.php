@@ -43,6 +43,8 @@ $productos = $row_pro['tags'];
 $servicios = $row_pro['tags1'];
 $tproductos = explode(" ", $productos);
 $tservicios = explode(" ", $servicios);
+$tproductos = preg_replace('/[^a-z]+/i', '', $tproductos);
+$tservicios = preg_replace('/[^a-z]+/i', '', $tservicios);
 $pilaproductos = array();
 $pilaservicios = array();
 
