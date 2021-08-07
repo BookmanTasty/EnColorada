@@ -77,7 +77,19 @@ else {
 
         // Ravisamos si el lugar esta abierto o cerrado
 
-        $estado = getEstado($hora, $apertura, $cierre);
+        $dapertura = explode(",", $row_pro['diasAp']);
+        $hoy = date("N") - 1;
+        $estado = getEstado($dapertura[$hoy], $hora, $apertura, $cierre);
+
+        //Dias de apertura
+        $pilaApertura = array();
+        for ($i = 0; $i <= count($dapertura) - 1; $i++){
+            if ($dapertura[$i] == 0 ){
+                 array_push($pilaApertura, "Cerrado");
+            } else {
+                array_push($pilaApertura, "Abierto");
+            }
+        }
 
         // actualizacion de horarios apertura y cierre del modal
 
@@ -135,7 +147,21 @@ else {
          
         <p class='text-justify' style='text-align: justify'>$descripcion</p>
         
-        <p> Horarios  Apertura: $hapertura  Cierre: $hcierre <p>
+        <p> Horarios  </p>
+        <table class='tftable' border='0'>
+        <tr><td>Apertura:</td><td>$hapertura</td><td>Cierre:</td><td>$hcierre</td></tr>
+        <tr><td>Lunes:</td><td>$pilaApertura[0]</td></tr>
+        <tr><td>Martes:</td><td>$pilaApertura[1]</td></tr>
+        <tr><td>Miercoles:</td><td>$pilaApertura[2]</td></tr>
+        <tr><td>Jueves:</td><td>$pilaApertura[3]</td></tr>
+        <tr><td>Viernes:</td><td>$pilaApertura[4]</td></tr>
+        <tr><td>Sabado:</td><td>$pilaApertura[5]</td></tr>
+        <tr><td>Domingo:</td><td>$pilaApertura[6]</td></tr>
+        </table>
+
+
+        <BR> 
+        
         <p>Productos</p>
         <p>$fproductos</p>
         <p>Servicios</p>

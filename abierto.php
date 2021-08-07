@@ -78,7 +78,7 @@ if ($idfichas == null) {
 
         <div class="container-fluid">
             <div class="row justify-content-center" style="padding: 10px;" >
-                
+
                 <?php
                 echo "<h1>Abierto ahora en Colorada</h1>";
                 while ($row_pro = mysqli_fetch_array($run_pro)) {
@@ -100,7 +100,27 @@ if ($idfichas == null) {
 
                     // Ravisamos si el lugar esta abierto o cerrado
 
-                    $estado = getEstado($hora, $apertura, $cierre);
+                    $dapertura = explode(",", $row_pro['diasAp']);
+                    $hoy = date("N") - 1;
+                    $estado = getEstado($dapertura[$hoy], $hora, $apertura, $cierre);
+
+                    if ($dapertura[$hoy] == 0) {
+                        $oculta = "display: none;";
+                    } else {
+                        $oculta = "";
+                    }
+
+                    //Dias de apertura
+                    $pilaApertura = array();
+                    for ($i = 0; $i <= count($dapertura) - 1; $i++) {
+                        if ($dapertura[$i] == 0) {
+                            array_push($pilaApertura, "Cerrado");
+                        } else {
+                            array_push($pilaApertura, "Abierto");
+                        }
+                    }
+
+
 
                     // actualizacion de horarios apertura y cierre del modal
 
@@ -130,7 +150,7 @@ if ($idfichas == null) {
                     $fservicios = implode(" ", $pilaservicios);
                     echo "
 				
-<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
+<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;$oculta'>
 				<div class='row g-0'>
 				<div class='col-md-4'>
 				<img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start' alt='$descripcion'>
@@ -158,7 +178,18 @@ if ($idfichas == null) {
          
         <p class='text-justify' style='text-align: justify'>$descripcion</p>
         
-        <p> Horarios  Apertura: $hapertura  Cierre: $hcierre <p>
+        <p> Horarios  </p>
+                        <table class='tftable' border='0'>
+                            <tr><td>Apertura:</td><td>$hapertura</td><td>Cierre:</td><td>$hcierre</td></tr>
+                            <tr><td>Lunes:</td><td>$pilaApertura[0]</td></tr>
+                            <tr><td>Martes:</td><td>$pilaApertura[1]</td></tr>
+                            <tr><td>Miercoles:</td><td>$pilaApertura[2]</td></tr>
+                            <tr><td>Jueves:</td><td>$pilaApertura[3]</td></tr>
+                            <tr><td>Viernes:</td><td>$pilaApertura[4]</td></tr>
+                            <tr><td>Sabado:</td><td>$pilaApertura[5]</td></tr>
+                            <tr><td>Domingo:</td><td>$pilaApertura[6]</td></tr>
+                        </table>
+                        <br>
         <p>Productos</p>
         <p>$fproductos</p>
         <p>Servicios</p>

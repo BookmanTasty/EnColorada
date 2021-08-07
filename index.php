@@ -7,23 +7,17 @@ mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');
 // modeulo sesion y aleatoriedad, se utilizara posteriormente para sesiones de usuarios
 session_start();
-if (isset($_SESSION['rnd']))
-{
+if (isset($_SESSION['rnd'])) {
     $rnd = $_SESSION['rnd'];
-}
-else
-{
+} else {
     $_SESSION['rnd'] = random_int(100, 999);
     $rnd = $_SESSION['rnd'];
 }
 
 // cargamos la variables de paginacion de la pagina
-if (isset($_GET['numeropagina']))
-{
+if (isset($_GET['numeropagina'])) {
     $numeropagina = $_GET['numeropagina'];
-}
-else
-{
+} else {
     $numeropagina = 1;
 }
 
@@ -68,15 +62,12 @@ include ("funciones/funciones.php");
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                        </li>
+                        </li>                        
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Lugares</a>
+                            <a class="nav-link" href="abierto.php">Abierto ahora</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="categorias.php">Categorías</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Abierto ahora</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Sobre Nosotros</a>
@@ -143,7 +134,7 @@ include ("funciones/funciones.php");
                     });
                 </script>
                 <!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
-                <?php
+<?php
 // sitema de paginacion
 $total_pages_sql = "SELECT COUNT(*) FROM fichas";
 $result = mysqli_query($con, $total_pages_sql);
@@ -154,8 +145,7 @@ $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_
 
 $run_pro = mysqli_query($con, $get_pro);
 
-while ($row_pro = mysqli_fetch_array($run_pro))
-{
+while ($row_pro = mysqli_fetch_array($run_pro)) {
 
     $idfichas = $row_pro['idfichas'];
     $nombre = $row_pro['nombre'];
@@ -171,7 +161,20 @@ while ($row_pro = mysqli_fetch_array($run_pro))
     mysqli_query($con, $acontador);
 
     // Ravisamos si el lugar esta abierto o cerrado
-    $estado = getEstado($hora, $apertura, $cierre);
+
+    $dapertura = explode(",", $row_pro['diasAp']);
+    $hoy = date("N") - 1;
+    $estado = getEstado($dapertura[$hoy], $hora, $apertura, $cierre);
+
+    //Dias de apertura
+    $pilaApertura = array();
+    for ($i = 0; $i <= count($dapertura) - 1; $i++) {
+        if ($dapertura[$i] == 0) {
+            array_push($pilaApertura, "Cerrado");
+        } else {
+            array_push($pilaApertura, "Abierto");
+        }
+    }
 
     // actualizacion de horarios apertura y cierre del modal
     $hapertura = getHorario($apertura);
@@ -187,14 +190,12 @@ while ($row_pro = mysqli_fetch_array($run_pro))
     $pilaproductos = array();
     $pilaservicios = array();
 
-    for ($i = 0;$i < count($tproductos);$i++)
-    {
+    for ($i = 0; $i < count($tproductos); $i++) {
         $capi = ucfirst($tproductos[$i]);
         array_push($pilaproductos, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
     }
 
-    for ($i = 0;$i < count($tservicios);$i++)
-    {
+    for ($i = 0; $i < count($tservicios); $i++) {
         $capi = ucfirst($tservicios[$i]);
         array_push($pilaservicios, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
     }
@@ -243,7 +244,20 @@ while ($row_pro = mysqli_fetch_array($run_pro))
          
         <p class='text-justify' style='text-align: justify'>$descripcion</p>
         
-        <p> Horarios  Apertura: $hapertura  Cierre: $hcierre <p>
+        <p> Horarios  </p>
+        <table class='tftable' border='0'>
+        <tr><td>Apertura:</td><td>$hapertura</td><td>Cierre:</td><td>$hcierre</td></tr>
+        <tr><td>Lunes:</td><td>$pilaApertura[0]</td></tr>
+        <tr><td>Martes:</td><td>$pilaApertura[1]</td></tr>
+        <tr><td>Miercoles:</td><td>$pilaApertura[2]</td></tr>
+        <tr><td>Jueves:</td><td>$pilaApertura[3]</td></tr>
+        <tr><td>Viernes:</td><td>$pilaApertura[4]</td></tr>
+        <tr><td>Sabado:</td><td>$pilaApertura[5]</td></tr>
+        <tr><td>Domingo:</td><td>$pilaApertura[6]</td></tr>
+        </table>
+
+
+        <BR>
         <p>Productos</p>
         <p>$fproductos</p>
         <p>Servicios</p>
@@ -278,40 +292,30 @@ while ($row_pro = mysqli_fetch_array($run_pro))
                 <nav aria-label="Page navigation example" style="display: none;">
                     <ul class="pagination justify-content-center">
                         <li class="page-item"><a class="page-link" href="<?php
-if ($numeropagina <= 1)
-{
-    echo '#';
-}
-else
-{
-    echo "?numeropagina=" . ($numeropagina - 1);
-}
+                if ($numeropagina <= 1) {
+                    echo '#';
+                } else {
+                    echo "?numeropagina=" . ($numeropagina - 1);
+                }
 ?>">Anterior</a></li>
 
-                        <?php
+<?php
 // esta ciclo for rellena automaticamente las paginas disponibles
-for ($i = 1;$i <= $total_pages;$i++)
-{
-    if ($i == $numeropagina)
-    {
+for ($i = 1; $i <= $total_pages; $i++) {
+    if ($i == $numeropagina) {
         echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
-    }
-    else
-    {
+    } else {
         echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
     }
 }
 ?>
 
                         <li class="page-item"><a class="page-link" href="<?php
-if ($numeropagina >= $total_pages)
-{
-    echo '#';
-}
-else
-{
-    echo "?numeropagina=" . ($numeropagina + 1);
-}
+                            if ($numeropagina >= $total_pages) {
+                                echo '#';
+                            } else {
+                                echo "?numeropagina=" . ($numeropagina + 1);
+                            }
 ?>">Siguiente</a></li>
                     </ul>
                 </nav>
