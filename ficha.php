@@ -49,11 +49,13 @@ $pilaproductos = array();
 $pilaservicios = array();
 
 for ($i = 0; $i < count($tproductos); $i++) {
-    array_push($pilaproductos, "<a href='unitags?producto=$tproductos[$i]' class='btn btn-light'>$tproductos[$i]</a>");
+    $capi = ucfirst($tproductos[$i]);
+    array_push($pilaproductos, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
 }
 
 for ($i = 0; $i < count($tservicios); $i++) {
-    array_push($pilaservicios, "<a href='unitags?servicio=$tservicios[$i]' class='btn btn-light'>$tservicios[$i]</a>");
+    $capi = ucfirst($tservicios[$i]);
+    array_push($pilaservicios, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
 }
 $fproductos = implode(" ", $pilaproductos);
 $fservicios = implode(" ", $pilaservicios);

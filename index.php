@@ -7,26 +7,30 @@ mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');
 // modeulo sesion y aleatoriedad, se utilizara posteriormente para sesiones de usuarios
 session_start();
-if (isset($_SESSION['rnd'])) {
+if (isset($_SESSION['rnd']))
+{
     $rnd = $_SESSION['rnd'];
-} else {
+}
+else
+{
     $_SESSION['rnd'] = random_int(100, 999);
     $rnd = $_SESSION['rnd'];
 }
 
-// cargamos la variables de paginacion de la pagina 
-
-if (isset($_GET['numeropagina'])) {
+// cargamos la variables de paginacion de la pagina
+if (isset($_GET['numeropagina']))
+{
     $numeropagina = $_GET['numeropagina'];
-} else {
+}
+else
+{
     $numeropagina = 1;
 }
 
 $fichas_por_pagina = 10;
 $offset = ($numeropagina - 1) * $fichas_por_pagina;
 // con esto cargamos las funciones mas recurrentes del sistema
-
-include("funciones/funciones.php");
+include ("funciones/funciones.php");
 ?>
 
 <html>
@@ -42,7 +46,7 @@ include("funciones/funciones.php");
         <script src="js/bootstrap.min.js"></script> 
         <script src="js/infinito.js"></script>
 
-        
+
         <meta charset="UTF-8">
 
 
@@ -140,51 +144,77 @@ include("funciones/funciones.php");
                 </script>
                 <!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
                 <?php
-                // sitema de paginacion
+// sitema de paginacion
+$total_pages_sql = "SELECT COUNT(*) FROM fichas";
+$result = mysqli_query($con, $total_pages_sql);
+$total_rows = mysqli_fetch_array($result) [0];
+$total_pages = ceil($total_rows / $fichas_por_pagina);
 
-                $total_pages_sql = "SELECT COUNT(*) FROM fichas";
-                $result = mysqli_query($con, $total_pages_sql);
-                $total_rows = mysqli_fetch_array($result)[0];
-                $total_pages = ceil($total_rows / $fichas_por_pagina);
+$get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
 
-                $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
+$run_pro = mysqli_query($con, $get_pro);
 
-                $run_pro = mysqli_query($con, $get_pro);
+while ($row_pro = mysqli_fetch_array($run_pro))
+{
 
-                while ($row_pro = mysqli_fetch_array($run_pro)) {
+    $idfichas = $row_pro['idfichas'];
+    $nombre = $row_pro['nombre'];
+    $descripcion = $row_pro['desc'];
+    $apertura = $row_pro['ha'];
+    $cierre = $row_pro['hc'];
+    $hora = getHora_m();
+    $descripcion_adaptada = substr($descripcion, 0, 140);
+    // funciones actualizar contador de vistas
+    $contador = $row_pro['contadorl'];
+    $conta1 = $contador + 1;
+    $acontador = "UPDATE fichas SET contadorl='$conta1' WHERE idfichas = '$idfichas'";
+    mysqli_query($con, $acontador);
 
-                    $idfichas = $row_pro['idfichas'];
-                    $nombre = $row_pro['nombre'];
-                    $descripcion = $row_pro['desc'];
-                    $apertura = $row_pro['ha'];
-                    $cierre = $row_pro['hc'];
-                    $hora = getHora_m();
-                    $descripcion_adaptada = substr($descripcion,0,140);
-                    // funciones actualizar contador de vistas
+    // Ravisamos si el lugar esta abierto o cerrado
+    $estado = getEstado($hora, $apertura, $cierre);
 
-                    $contador = $row_pro['contadorl'];
-                    $conta1 = $contador + 1;
-                    $acontador = "UPDATE fichas SET contadorl='$conta1' WHERE idfichas = '$idfichas'";
-                    mysqli_query($con, $acontador);
+    // actualizacion de horarios apertura y cierre del modal
+    $hapertura = getHorario($apertura);
+    $hcierre = getHorario($cierre);
 
-                    // Ravisamos si el lugar esta abierto o cerrado
+    // Cargar tags productos y servicios
+    $productos = $row_pro['tags'];
+    $servicios = $row_pro['tags1'];
+    $tproductos = explode(" ", $productos);
+    $tservicios = explode(" ", $servicios);
+    $tproductos = preg_replace('/[^a-z]+/i', '', $tproductos);
+    $tservicios = preg_replace('/[^a-z]+/i', '', $tservicios);
+    $pilaproductos = array();
+    $pilaservicios = array();
 
-                    $estado = getEstado($hora, $apertura, $cierre);
+    for ($i = 0;$i < count($tproductos);$i++)
+    {
+        $capi = ucfirst($tproductos[$i]);
+        array_push($pilaproductos, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
+    }
 
-                    // Colocamos las fichas cargadas desde la base de datos
-                    // codigo temporal para crear carpetas e imagenes de logo e imagenes temporles
-                    // mkdir("img/fichas/$idfichas",0700);
-                    // $img = imagecreate(240, 240);
-                    // $white = imagecolorallocate($img, 255, 255, 255);
-                    // $black = imagecolorallocate($img, 0, 0, 0);
-                    // imagefilledrectangle($img, 0, 0, 240, 240, $black);
-                    // imagestring($img, 5, 0, 0, $nombre, $white);
-                    // imagepng($img, "img/fichas/$idfichas/logo.png");
-                    // imagestring($img, 5, 0, 0, $descripcion, $white);
-                    // imagepng($img, "img/fichas/$idfichas/id1.png");
-                    // imagestring($img, 5, 0, 0, $apertura, $white);
-                    // imagepng($img, "img/fichas/$idfichas/id2.png");
-                    echo "
+    for ($i = 0;$i < count($tservicios);$i++)
+    {
+        $capi = ucfirst($tservicios[$i]);
+        array_push($pilaservicios, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
+    }
+    $fproductos = implode(" ", $pilaproductos);
+    $fservicios = implode(" ", $pilaservicios);
+
+    // Colocamos las fichas cargadas desde la base de datos
+    // codigo temporal para crear carpetas e imagenes de logo e imagenes temporles
+    // mkdir("img/fichas/$idfichas",0700);
+    // $img = imagecreate(240, 240);
+    // $white = imagecolorallocate($img, 255, 255, 255);
+    // $black = imagecolorallocate($img, 0, 0, 0);
+    // imagefilledrectangle($img, 0, 0, 240, 240, $black);
+    // imagestring($img, 5, 0, 0, $nombre, $white);
+    // imagepng($img, "img/fichas/$idfichas/logo.png");
+    // imagestring($img, 5, 0, 0, $descripcion, $white);
+    // imagepng($img, "img/fichas/$idfichas/id1.png");
+    // imagestring($img, 5, 0, 0, $apertura, $white);
+    // imagepng($img, "img/fichas/$idfichas/id2.png");
+    echo "
 				<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
 				<div class='row g-0'>
 				<div class='col-md-4'>
@@ -196,7 +226,36 @@ include("funciones/funciones.php");
 				<p class='card-text text-justify' style='text-align: justify'>$descripcion_adaptada</p>
 				<p class='card-text'>$estado</p>
 				<p class='card-text'><small class='text-muted'>Actualizado hace $hora tiempo</small></p>
-				<button type='button' class='btn btn-primary'>Ver mas</button>
+								<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#$idfichas'>Ver mas</button>
+                                <!-- Modal -->
+<div class='modal fade' id='$idfichas' tabindex='-1' aria-labelledby='$idfichas' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='exampleModalLabel'>$nombre</h5>
+        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+      </div>
+      <div class='modal-body'>
+     
+        <img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start mx-auto d-block'  alt='$descripcion'>
+          
+            <p ><strong>$estado</strong></p>
+         
+        <p class='text-justify' style='text-align: justify'>$descripcion</p>
+        
+        <p> Horarios  Apertura: $hapertura  Cierre: $hcierre <p>
+        <p>Productos</p>
+        <p>$fproductos</p>
+        <p>Servicios</p>
+        <p>$fservicios</p>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+        <a href='ficha.php?ficha=$idfichas' class='btn btn-primary'>Mas informacion</a>
+      </div>
+    </div>
+  </div>
+</div>
 				</div>
 				</div>
 				</div>
@@ -205,8 +264,8 @@ include("funciones/funciones.php");
 	
 	
 		";
-                }
-                ?>
+}
+?>
 
 
                 <!-- aqui inicia el inifine scrool aun falta por implementar -->
@@ -219,47 +278,57 @@ include("funciones/funciones.php");
                 <nav aria-label="Page navigation example" style="display: none;">
                     <ul class="pagination justify-content-center">
                         <li class="page-item"><a class="page-link" href="<?php
-                if ($numeropagina <= 1) {
-                    echo '#';
-                } else {
-                    echo "?numeropagina=" . ($numeropagina - 1);
-                }
-                ?>">Anterior</a></li>
+if ($numeropagina <= 1)
+{
+    echo '#';
+}
+else
+{
+    echo "?numeropagina=" . ($numeropagina - 1);
+}
+?>">Anterior</a></li>
 
                         <?php
-                        // esta ciclo for rellena automaticamente las paginas disponibles
-                        for ($i = 1; $i <= $total_pages; $i++) {
-                            if ($i == $numeropagina) {
-                                echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
-                            } else {
-                                echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
-                            }
-                        }
-                        ?>
+// esta ciclo for rellena automaticamente las paginas disponibles
+for ($i = 1;$i <= $total_pages;$i++)
+{
+    if ($i == $numeropagina)
+    {
+        echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
+    }
+    else
+    {
+        echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
+    }
+}
+?>
 
                         <li class="page-item"><a class="page-link" href="<?php
-                        if ($numeropagina >= $total_pages) {
-                            echo '#';
-                        } else {
-                            echo "?numeropagina=" . ($numeropagina + 1);
-                        }
-                        ?>">Siguiente</a></li>
+if ($numeropagina >= $total_pages)
+{
+    echo '#';
+}
+else
+{
+    echo "?numeropagina=" . ($numeropagina + 1);
+}
+?>">Siguiente</a></li>
                     </ul>
                 </nav>
 
                 <div  id="loader" style="display: none;"  >
-                    
+
                     <div class="pagination justify-content-center">Desliza hacia abajo para cargar mas elementos</div>
-                    
+
                     <div class="pagination justify-content-center"><img src="img/loader.gif"></img></div>
-                    
+
                 </div>
-                
+
                 <div id="finale" style="display: none;"  >
-                    
+
                     <div class="pagination justify-content-center">No hay mas elementos</div>
-                   
-                    
+
+
                 </div>
 
 

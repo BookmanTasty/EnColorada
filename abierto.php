@@ -1,13 +1,8 @@
 <?php
 include("funciones/funciones.php");
 
-if (isset($_GET['tag'])) {
-    $tag = $_GET['tag'];
-} else {
-    header('Location: 404.php');
-}
-
-$getTag = "select * from fichas WHERE tags Like '%$tag%' OR tags1 like '%$tag%'";
+$hora = getHora_m();
+$getTag = "SELECT * FROM `fichas` WHERE ha < $hora AND hc > $hora";
 $run_pro = mysqli_query($con, $getTag);
 $row_pro = mysqli_fetch_array($run_pro);
 
@@ -85,7 +80,7 @@ if ($idfichas == null) {
             <div class="row justify-content-center" style="padding: 10px;" >
                 
                 <?php
-                echo "<h1>Muestrame $tag en Colorada</h1>";
+                echo "<h1>Abierto ahora en Colorada</h1>";
                 while ($row_pro = mysqli_fetch_array($run_pro)) {
 
                     $idfichas = $row_pro['idfichas'];
