@@ -52,38 +52,35 @@ include ("funciones/funciones.php");
 
         <!-- Esta es la barra de navegacion en header -->
 
-        <nav class="navbar sticky-top navbar-expand-lg  navbar-light bg-light">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">EnColorada</a>
+                <a class="navbar-brand" href="#"><img src="img/logo.svg" width="180px" alt="Logo en Colorada"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                        </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="abierto.php">Abierto ahora</a>
+                            <a class="nav-link active" aria-current="page" href="#">Categorías</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="categorias.php">Categorías</a>
+                            <a class="nav-link active" aria-current="page" href="#">Abierto ahora</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sobre Nosotros</a>
+                            <a class="nav-link active" aria-current="page" href="#">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contacto</a>
+                            <a class="nav-link active" aria-current="page" href="#">Anúnciate Aquí</a>
                         </li>
 
                     </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-success" type="submit">An&uacutenciate aqu&iacute</button>  <!-- Boton de busqueda de servicios o negocios -->
+                    <form class="d-flex" method="post" action="buscar.php">
+                        <input class="form-control me-2" type="search" placeholder="Busca en Colorada" aria-label="Search" name="tag">
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
                 </div>
             </div>
         </nav>
-
 
         <!-- Jumbotron -->
 
@@ -134,88 +131,88 @@ include ("funciones/funciones.php");
                     });
                 </script>
                 <!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
-<?php
+                <?php
 // sitema de paginacion
-$total_pages_sql = "SELECT COUNT(*) FROM fichas";
-$result = mysqli_query($con, $total_pages_sql);
-$total_rows = mysqli_fetch_array($result) [0];
-$total_pages = ceil($total_rows / $fichas_por_pagina);
+                $total_pages_sql = "SELECT COUNT(*) FROM fichas";
+                $result = mysqli_query($con, $total_pages_sql);
+                $total_rows = mysqli_fetch_array($result) [0];
+                $total_pages = ceil($total_rows / $fichas_por_pagina);
 
-$get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
+                $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
 
-$run_pro = mysqli_query($con, $get_pro);
+                $run_pro = mysqli_query($con, $get_pro);
 
-while ($row_pro = mysqli_fetch_array($run_pro)) {
+                while ($row_pro = mysqli_fetch_array($run_pro)) {
 
-    $idfichas = $row_pro['idfichas'];
-    $nombre = $row_pro['nombre'];
-    $descripcion = $row_pro['desc'];
-    $apertura = $row_pro['ha'];
-    $cierre = $row_pro['hc'];
-    $hora = getHora_m();
-    $descripcion_adaptada = substr($descripcion, 0, 140);
-    // funciones actualizar contador de vistas
-    $contador = $row_pro['contadorl'];
-    $conta1 = $contador + 1;
-    $acontador = "UPDATE fichas SET contadorl='$conta1' WHERE idfichas = '$idfichas'";
-    mysqli_query($con, $acontador);
+                    $idfichas = $row_pro['idfichas'];
+                    $nombre = $row_pro['nombre'];
+                    $descripcion = $row_pro['desc'];
+                    $apertura = $row_pro['ha'];
+                    $cierre = $row_pro['hc'];
+                    $hora = getHora_m();
+                    $descripcion_adaptada = substr($descripcion, 0, 140);
+                    // funciones actualizar contador de vistas
+                    $contador = $row_pro['contadorl'];
+                    $conta1 = $contador + 1;
+                    $acontador = "UPDATE fichas SET contadorl='$conta1' WHERE idfichas = '$idfichas'";
+                    mysqli_query($con, $acontador);
 
-    // Ravisamos si el lugar esta abierto o cerrado
+                    // Ravisamos si el lugar esta abierto o cerrado
 
-    $dapertura = explode(",", $row_pro['diasAp']);
-    $hoy = date("N") - 1;
-    $estado = getEstado($dapertura[$hoy], $hora, $apertura, $cierre);
+                    $dapertura = explode(",", $row_pro['diasAp']);
+                    $hoy = date("N") - 1;
+                    $estado = getEstado($dapertura[$hoy], $hora, $apertura, $cierre);
 
-    //Dias de apertura
-    $pilaApertura = array();
-    for ($i = 0; $i <= count($dapertura) - 1; $i++) {
-        if ($dapertura[$i] == 0) {
-            array_push($pilaApertura, "Cerrado");
-        } else {
-            array_push($pilaApertura, "Abierto");
-        }
-    }
+                    //Dias de apertura
+                    $pilaApertura = array();
+                    for ($i = 0; $i <= count($dapertura) - 1; $i++) {
+                        if ($dapertura[$i] == 0) {
+                            array_push($pilaApertura, "Cerrado");
+                        } else {
+                            array_push($pilaApertura, "Abierto");
+                        }
+                    }
 
-    // actualizacion de horarios apertura y cierre del modal
-    $hapertura = getHorario($apertura);
-    $hcierre = getHorario($cierre);
+                    // actualizacion de horarios apertura y cierre del modal
+                    $hapertura = getHorario($apertura);
+                    $hcierre = getHorario($cierre);
 
-    // Cargar tags productos y servicios
-    $productos = $row_pro['tags'];
-    $servicios = $row_pro['tags1'];
-    $tproductos = explode(" ", $productos);
-    $tservicios = explode(" ", $servicios);
-    $tproductos = preg_replace('/[^a-z]+/i', '', $tproductos);
-    $tservicios = preg_replace('/[^a-z]+/i', '', $tservicios);
-    $pilaproductos = array();
-    $pilaservicios = array();
+                    // Cargar tags productos y servicios
+                    $productos = $row_pro['tags'];
+                    $servicios = $row_pro['tags1'];
+                    $tproductos = explode(" ", $productos);
+                    $tservicios = explode(" ", $servicios);
+                    $tproductos = preg_replace('/[^a-z]+/i', '', $tproductos);
+                    $tservicios = preg_replace('/[^a-z]+/i', '', $tservicios);
+                    $pilaproductos = array();
+                    $pilaservicios = array();
 
-    for ($i = 0; $i < count($tproductos); $i++) {
-        $capi = ucfirst($tproductos[$i]);
-        array_push($pilaproductos, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
-    }
+                    for ($i = 0; $i < count($tproductos); $i++) {
+                        $capi = ucfirst($tproductos[$i]);
+                        array_push($pilaproductos, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
+                    }
 
-    for ($i = 0; $i < count($tservicios); $i++) {
-        $capi = ucfirst($tservicios[$i]);
-        array_push($pilaservicios, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
-    }
-    $fproductos = implode(" ", $pilaproductos);
-    $fservicios = implode(" ", $pilaservicios);
+                    for ($i = 0; $i < count($tservicios); $i++) {
+                        $capi = ucfirst($tservicios[$i]);
+                        array_push($pilaservicios, "<a href='unitags.php?tag=$capi' class='btn btn-light'>$capi</a>");
+                    }
+                    $fproductos = implode(" ", $pilaproductos);
+                    $fservicios = implode(" ", $pilaservicios);
 
-    // Colocamos las fichas cargadas desde la base de datos
-    // codigo temporal para crear carpetas e imagenes de logo e imagenes temporles
-    // mkdir("img/fichas/$idfichas",0700);
-    // $img = imagecreate(240, 240);
-    // $white = imagecolorallocate($img, 255, 255, 255);
-    // $black = imagecolorallocate($img, 0, 0, 0);
-    // imagefilledrectangle($img, 0, 0, 240, 240, $black);
-    // imagestring($img, 5, 0, 0, $nombre, $white);
-    // imagepng($img, "img/fichas/$idfichas/logo.png");
-    // imagestring($img, 5, 0, 0, $descripcion, $white);
-    // imagepng($img, "img/fichas/$idfichas/id1.png");
-    // imagestring($img, 5, 0, 0, $apertura, $white);
-    // imagepng($img, "img/fichas/$idfichas/id2.png");
-    echo "
+                    // Colocamos las fichas cargadas desde la base de datos
+                    // codigo temporal para crear carpetas e imagenes de logo e imagenes temporles
+                    // mkdir("img/fichas/$idfichas",0700);
+                    // $img = imagecreate(240, 240);
+                    // $white = imagecolorallocate($img, 255, 255, 255);
+                    // $black = imagecolorallocate($img, 0, 0, 0);
+                    // imagefilledrectangle($img, 0, 0, 240, 240, $black);
+                    // imagestring($img, 5, 0, 0, $nombre, $white);
+                    // imagepng($img, "img/fichas/$idfichas/logo.png");
+                    // imagestring($img, 5, 0, 0, $descripcion, $white);
+                    // imagepng($img, "img/fichas/$idfichas/id1.png");
+                    // imagestring($img, 5, 0, 0, $apertura, $white);
+                    // imagepng($img, "img/fichas/$idfichas/id2.png");
+                    echo "
 				<div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
 				<div class='row g-0'>
 				<div class='col-md-4'>
@@ -278,8 +275,8 @@ while ($row_pro = mysqli_fetch_array($run_pro)) {
 	
 	
 		";
-}
-?>
+                }
+                ?>
 
 
                 <!-- aqui inicia el inifine scrool aun falta por implementar -->
@@ -292,23 +289,23 @@ while ($row_pro = mysqli_fetch_array($run_pro)) {
                 <nav aria-label="Page navigation example" style="display: none;">
                     <ul class="pagination justify-content-center">
                         <li class="page-item"><a class="page-link" href="<?php
-                if ($numeropagina <= 1) {
-                    echo '#';
-                } else {
-                    echo "?numeropagina=" . ($numeropagina - 1);
-                }
-?>">Anterior</a></li>
+                            if ($numeropagina <= 1) {
+                                echo '#';
+                            } else {
+                                echo "?numeropagina=" . ($numeropagina - 1);
+                            }
+                            ?>">Anterior</a></li>
 
-<?php
+                        <?php
 // esta ciclo for rellena automaticamente las paginas disponibles
-for ($i = 1; $i <= $total_pages; $i++) {
-    if ($i == $numeropagina) {
-        echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
-    } else {
-        echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
-    }
-}
-?>
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            if ($i == $numeropagina) {
+                                echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
+                            } else {
+                                echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
+                            }
+                        }
+                        ?>
 
                         <li class="page-item"><a class="page-link" href="<?php
                             if ($numeropagina >= $total_pages) {
@@ -316,7 +313,7 @@ for ($i = 1; $i <= $total_pages; $i++) {
                             } else {
                                 echo "?numeropagina=" . ($numeropagina + 1);
                             }
-?>">Siguiente</a></li>
+                            ?>">Siguiente</a></li>
                     </ul>
                 </nav>
 

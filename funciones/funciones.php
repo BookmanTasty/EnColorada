@@ -1,7 +1,7 @@
 <?php
 
 // Conectamos al servidor desde este metodo
-$con = mysqli_connect("sql3.freemysqlhosting.net", "sql3423802", "VaegNBjVX7", "sql3423802");
+$con = mysqli_connect("localhost", "root", "", "encolorada");
 if (mysqli_connect_errno()) {
     echo "Error en coneccion" . mysqli_connect_error();
 }

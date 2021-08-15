@@ -1,3 +1,4 @@
+
 <?php
 
 // con esto cargamos las funciones mas recurrentes del sistema
@@ -37,22 +38,10 @@ if ($_POST['page'] == $total_pages) {
 else {
 
 // sitema de paginacion
-    echo " <div class='container-fluid'>
-            <div class='row justify-content-center' style='padding: 10px;' >
-
-                <!-- script jquery mostrar textos extentidos descripciones-->
-                <script>
-                    $(document).ready(function () {
-                        $('.card-text').hover(
-                                function () {
-                                    $(this).removeClass('text-truncate');
-                                },
-                                function () {
-                                    $(this).addClass('text-truncate');
-                                }
-                        );
-                    });
-                </script> ";
+    echo " 
+                    <div class='container-fluid'>
+    <div class='row justify-content-center' style='padding: 10px;' >
+                ";
 
     $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
 
@@ -83,9 +72,9 @@ else {
 
         //Dias de apertura
         $pilaApertura = array();
-        for ($i = 0; $i <= count($dapertura) - 1; $i++){
-            if ($dapertura[$i] == 0 ){
-                 array_push($pilaApertura, "Cerrado");
+        for ($i = 0; $i <= count($dapertura) - 1; $i++) {
+            if ($dapertura[$i] == 0) {
+                array_push($pilaApertura, "Cerrado");
             } else {
                 array_push($pilaApertura, "Abierto");
             }
@@ -118,72 +107,100 @@ else {
         $fproductos = implode(" ", $pilaproductos);
         $fservicios = implode(" ", $pilaservicios);
         echo "
-				
 <div class='card m-3 pe-2' style='max-width: 540px; padding: 10px;'>
-				<div class='row g-0'>
-				<div class='col-md-4'>
-				<img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start' alt='$descripcion'>
-				</div>
-				<div class='col-md-8'>
-				<div class='card-body'>				
-				<h5 class='card-title'>$nombre</h5>
-				<p class='card-text text-justify' style='text-align: justify'>$descripcion_adaptada</p>
-				<p class='card-text'>$estado</p>
-				<p class='card-text'><small class='text-muted'>Actualizado hace $hora tiempo</small></p>
-				<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#$idfichas'>Ver mas</button>
-                                <!-- Modal -->
-<div class='modal fade' id='$idfichas' tabindex='-1' aria-labelledby='$idfichas' aria-hidden='true'>
-  <div class='modal-dialog'>
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <h5 class='modal-title' id='exampleModalLabel'>$nombre</h5>
-        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-      </div>
-      <div class='modal-body'>
-     
-        <img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start mx-auto d-block'  alt='$descripcion'>
-          
-            <p ><strong>$estado</strong></p>
-         
-        <p class='text-justify' style='text-align: justify'>$descripcion</p>
-        
-        <p> Horarios  </p>
-        <table class='tftable' border='0'>
-        <tr><td>Apertura:</td><td>$hapertura</td><td>Cierre:</td><td>$hcierre</td></tr>
-        <tr><td>Lunes:</td><td>$pilaApertura[0]</td></tr>
-        <tr><td>Martes:</td><td>$pilaApertura[1]</td></tr>
-        <tr><td>Miercoles:</td><td>$pilaApertura[2]</td></tr>
-        <tr><td>Jueves:</td><td>$pilaApertura[3]</td></tr>
-        <tr><td>Viernes:</td><td>$pilaApertura[4]</td></tr>
-        <tr><td>Sabado:</td><td>$pilaApertura[5]</td></tr>
-        <tr><td>Domingo:</td><td>$pilaApertura[6]</td></tr>
-        </table>
+            <div class='row g-0'>
+                <div class='col-md-4'>
+                    <img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start' alt='$descripcion'>
+                </div>
+                <div class='col-md-8'>
+                    <div class='card-body'>
+                        <h5 class='card-title'>$nombre</h5>
+                        <p class='card-text text-justify' style='text-align: justify'>$descripcion_adaptada</p>
+                        <p class='card-text'>$estado</p>
+                        <p class='card-text'><small class='text-muted'>Actualizado hace $hora tiempo</small></p>
+                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#$idfichas'>Ver mas</button>
+                        <!--Modal-->
+                        <div class='modal fade' id='$idfichas' tabindex='-1' aria-labelledby='$idfichas' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h5 class='modal-title' id='exampleModalLabel'>$nombre</h5>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+
+                                        <img src='img/fichas/$idfichas/logo.png' class='img-fluid rounded-start mx-auto d-block' alt='$descripcion'>
+
+                                        <p><strong>$estado</strong></p>
+
+                                        <p class='text-justify' style='text-align: justify'>$descripcion</p>
+
+                                        <p> Horarios </p>
+                                        <table class='tftable' border='0'>
+                                            <tr>
+                                                <td>Apertura:</td>
+                                                <td>$hapertura</td>
+                                                <td>Cierre:</td>
+                                                <td>$hcierre</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lunes:</td>
+                                                <td>$pilaApertura[0]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Martes:</td>
+                                                <td>$pilaApertura[1]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Miercoles:</td>
+                                                <td>$pilaApertura[2]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jueves:</td>
+                                                <td>$pilaApertura[3]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Viernes:</td>
+                                                <td>$pilaApertura[4]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sabado:</td>
+                                                <td>$pilaApertura[5]</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Domingo:</td>
+                                                <td>$pilaApertura[6]</td>
+                                            </tr>
+                                        </table>
 
 
-        <BR> 
-        
-        <p>Productos</p>
-        <p>$fproductos</p>
-        <p>Servicios</p>
-        <p>$fservicios</p>
-      </div>
-      <div class='modal-footer'>
-        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-        <a href='ficha.php?ficha=$idfichas' class='btn btn-primary'>Mas informacion</a>
-      </div>
-    </div>
-  </div>
-</div>
-                                
-				</div>
-				</div>
-				
-	
-	
-	
-		";
-        echo " </div>
-				</div>";
+                                        <BR>
+
+                                        <p>Productos</p>
+                                        <p>$fproductos</p>
+                                        <p>Servicios</p>
+                                        <p>$fservicios</p>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <a href='ficha.php?ficha=$idfichas' class='btn btn-primary'>Mas informacion</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+  
+
+
+
+        ";
     }
+    echo '</div>
+</div>';
 }
 ?>
+
