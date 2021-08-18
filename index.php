@@ -14,15 +14,6 @@ if (isset($_SESSION['rnd'])) {
     $rnd = $_SESSION['rnd'];
 }
 
-// cargamos la variables de paginacion de la pagina
-if (isset($_GET['numeropagina'])) {
-    $numeropagina = $_GET['numeropagina'];
-} else {
-    $numeropagina = 1;
-}
-
-$fichas_por_pagina = 10;
-$offset = ($numeropagina - 1) * $fichas_por_pagina;
 // con esto cargamos las funciones mas recurrentes del sistema
 include ("funciones/funciones.php");
 ?>
@@ -38,8 +29,6 @@ include ("funciones/funciones.php");
         <script src="js/jquery.min.js"></script> 
         <script src="js/popper.min.js"></script> 
         <script src="js/bootstrap.min.js"></script> 
-        <script src="js/infinito.js"></script>
-
 
         <meta charset="UTF-8">
 
@@ -117,28 +106,17 @@ include ("funciones/funciones.php");
         <div class="container-fluid">
             <div class="row justify-content-center" style="padding: 10px;" >
 
-                <!-- script jquery mostrar textos extentidos descripciones-->
-                <script>
-                    $(document).ready(function () {
-                        $('.card-text00').hover(
-                                function () {
-                                    $(this).removeClass('text-truncate');
-                                },
-                                function () {
-                                    $(this).addClass('text-truncate');
-                                }
-                        );
-                    });
-                </script>
+
+            
                 <!-- aqui implementamos codigo php para la carga de contenido desde la base de datos -->
                 <?php
 // sitema de paginacion
                 $total_pages_sql = "SELECT COUNT(*) FROM fichas";
                 $result = mysqli_query($con, $total_pages_sql);
                 $total_rows = mysqli_fetch_array($result) [0];
-                $total_pages = ceil($total_rows / $fichas_por_pagina);
+               
 
-                $get_pro = "select * from fichas ORDER BY RAND($rnd) LIMIT $offset, $fichas_por_pagina ";
+                $get_pro = "select * from fichas ORDER BY RAND($rnd)";
 
                 $run_pro = mysqli_query($con, $get_pro);
 
@@ -284,53 +262,7 @@ include ("funciones/funciones.php");
 
                 <!-- aqui termina  el inifine scrool aun falta por implementar -->
 
-                <div id="page-content"></div>
-
-                <nav aria-label="Page navigation example" style="display: none;">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="<?php
-                            if ($numeropagina <= 1) {
-                                echo '#';
-                            } else {
-                                echo "?numeropagina=" . ($numeropagina - 1);
-                            }
-                            ?>">Anterior</a></li>
-
-                        <?php
-// esta ciclo for rellena automaticamente las paginas disponibles
-                        for ($i = 1; $i <= $total_pages; $i++) {
-                            if ($i == $numeropagina) {
-                                echo "<li class='page-item'><a class='page-link fw-bold' href='?numeropagina=$i'>$i</a></li>";
-                            } else {
-                                echo "<li class='page-item'><a class='page-link' href='?numeropagina=$i'>$i</a></li>";
-                            }
-                        }
-                        ?>
-
-                        <li class="page-item"><a class="page-link" href="<?php
-                            if ($numeropagina >= $total_pages) {
-                                echo '#';
-                            } else {
-                                echo "?numeropagina=" . ($numeropagina + 1);
-                            }
-                            ?>">Siguiente</a></li>
-                    </ul>
-                </nav>
-
-                <div  id="loader" style="display: none;"  >
-
-                    <div class="pagination justify-content-center">Desliza hacia abajo para cargar mas elementos</div>
-
-                    <div class="pagination justify-content-center"><img src="img/loader.gif"></img></div>
-
-                </div>
-
-                <div id="finale" style="display: none;"  >
-
-                    <div class="pagination justify-content-center">No hay mas elementos</div>
-
-
-                </div>
+                
 
 
             </div>
